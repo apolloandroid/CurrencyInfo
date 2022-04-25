@@ -16,6 +16,9 @@ android {
         versionCode 1
         versionName "1.0"
 
+        buildConfigField("String", "API_TOKEN", "\"b25f44d987d1485afb371014dbb0bb05\"")
+        buildConfigField("String", "API_BASE_URL", "\"http://api.exchangeratesapi.io/v1/\"")
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -58,7 +61,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
 
     //  OkHttp
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
 
     //  Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -71,6 +74,7 @@ dependencies {
     //  Serialization
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.0'
     implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0'
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
 
     //  Tests
     testImplementation 'junit:junit:4.13.2'
