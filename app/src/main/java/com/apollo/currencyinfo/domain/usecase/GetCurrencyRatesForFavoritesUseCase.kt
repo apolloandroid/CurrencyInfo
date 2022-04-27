@@ -2,16 +2,20 @@ package com.apollo.currencyinfo.domain.usecase
 
 import com.apollo.currencyinfo.data.currencyRate.CurrencyRateRepository
 import com.apollo.currencyinfo.domain.model.Currency
+import com.apollo.currencyinfo.domain.model.CurrencyRate
 import com.apollo.currencyinfo.domain.util.UseCase
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
-class GetCurrencyRatesForFavoriteUseCase @Inject constructor(
+class GetCurrencyRatesForFavoritesUseCase @Inject constructor(
     private val repository: CurrencyRateRepository
-) : UseCase<GetCurrencyRatesForFavoriteUseCase.Parameters, Unit>(Dispatchers.IO) {
+) : UseCase<GetCurrencyRatesForFavoritesUseCase.Parameters, List<CurrencyRate>>(Dispatchers.IO) {
 
-    override suspend fun execute(parameters: Parameters) {
-        repository.getRatesForFavorites(parameters.baseCurrency, parameters.favoriteCurrencies)
+    override suspend fun execute(parameters: Parameters): List<CurrencyRate> {
+        return repository.getRatesForFavorites(
+            parameters.baseCurrency,
+            parameters.favoriteCurrencies
+        )
     }
 
     data class Parameters(

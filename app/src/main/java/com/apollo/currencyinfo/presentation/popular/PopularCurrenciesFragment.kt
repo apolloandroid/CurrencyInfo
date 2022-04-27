@@ -113,7 +113,7 @@ class PopularCurrenciesFragment : BaseFragment() {
     }
 
     private fun setUpRatesRecycler() {
-        val adapter = CurrencyRateAdapter(viewModel::onAddCurrencyToFavoritesClicked)
+        val adapter = PopularCurrencyRateAdapter(viewModel::onAddCurrencyToFavoritesClicked)
         binding.recyclerRates.adapter = adapter
         val itemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
         AppCompatResources.getDrawable(requireContext(), R.drawable.background_divider)

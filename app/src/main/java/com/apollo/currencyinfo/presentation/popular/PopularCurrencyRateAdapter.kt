@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.apollo.currencyinfo.R
-import com.apollo.currencyinfo.databinding.ItemRateBinding
+import com.apollo.currencyinfo.databinding.ItemPopularCurrencyRateBinding
 import com.apollo.currencyinfo.domain.model.Currency
 import com.apollo.currencyinfo.domain.model.CurrencyRatePair
 
-class CurrencyRateAdapter(private val onClick: (Currency) -> Unit) :
-    ListAdapter<CurrencyRatePair, CurrencyRateAdapter.ViewHolder>(RateDiffCallback()) {
+class PopularCurrencyRateAdapter(private val onClick: (Currency) -> Unit) :
+    ListAdapter<CurrencyRatePair, PopularCurrencyRateAdapter.ViewHolder>(RateDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
@@ -24,13 +24,13 @@ class CurrencyRateAdapter(private val onClick: (Currency) -> Unit) :
         holder.bind(item, onClick)
     }
 
-    class ViewHolder private constructor(private val binding: ItemRateBinding) :
+    class ViewHolder private constructor(private val binding: ItemPopularCurrencyRateBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ItemRateBinding.inflate(layoutInflater, parent, false)
+                val binding = ItemPopularCurrencyRateBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }

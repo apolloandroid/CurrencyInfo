@@ -8,7 +8,7 @@ import com.apollo.currencyinfo.domain.sorting.CurrencyRateSorter
 import com.apollo.currencyinfo.domain.sorting.SortingOrder
 import com.apollo.currencyinfo.domain.sorting.SortingParameter
 import com.apollo.currencyinfo.domain.sorting.SortingState
-import com.apollo.currencyinfo.domain.usecase.GetAllCurrenciesUseCase
+import com.apollo.currencyinfo.domain.usecase.GetCurrenciesUseCase
 import com.apollo.currencyinfo.domain.usecase.GetCurrencyRatesUseCase
 import com.apollo.currencyinfo.domain.usecase.RefreshCurrenciesUseCase
 import com.apollo.currencyinfo.domain.usecase.SetCurrencyIsFavoriteUseCase
@@ -23,7 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PopularCurrenciesViewModel @Inject constructor(
     private val refreshCurrenciesUseCase: RefreshCurrenciesUseCase,
-    private val getAllCurrenciesUseCase: GetAllCurrenciesUseCase,
+    private val getCurrenciesUseCase: GetCurrenciesUseCase,
     private val getCurrencyRatesUseCase: GetCurrencyRatesUseCase,
     private val setCurrencyIsFavoriteUseCase: SetCurrencyIsFavoriteUseCase
 ) : BaseViewModel() {
@@ -34,7 +34,7 @@ class PopularCurrenciesViewModel @Inject constructor(
     private val _isSearchLayoutVisible = MutableStateFlow<Boolean>(false)
     val isSearchLayoutVisible = _isSearchLayoutVisible.asStateFlow()
 
-    private val currencies = getAllCurrenciesUseCase().successes()
+    private val currencies = getCurrenciesUseCase().successes()
     private val currencyNameToSearch = MutableStateFlow<String?>(null)
     val baseCurrencies = getCurrencies()
 

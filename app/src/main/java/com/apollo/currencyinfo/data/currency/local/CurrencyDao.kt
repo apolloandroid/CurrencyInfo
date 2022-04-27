@@ -18,9 +18,6 @@ interface CurrencyDao {
     @Query("SELECT * FROM currencies")
     fun getAllFlow(): Flow<List<CurrencyEntity>>
 
-    @Query("SELECT * FROM currencies WHERE is_favorite = 1 ")
-    fun getFavoritesFlow(): Flow<List<CurrencyEntity>>
-
     @Query("UPDATE currencies SET is_favorite = NOT is_favorite WHERE code = :code")
     fun setIsFavorite(code: String)
 }

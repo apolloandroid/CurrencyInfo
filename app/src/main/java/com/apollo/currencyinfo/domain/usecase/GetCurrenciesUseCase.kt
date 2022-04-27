@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class GetAllCurrenciesUseCase @Inject constructor(
+class GetCurrenciesUseCase @Inject constructor(
     private val repository: CurrencyRepository
 ) : FlowUseCase<List<Currency>>(Dispatchers.IO) {
 

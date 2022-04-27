@@ -9,21 +9,30 @@
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/drawable/background_white_round_corners_5dp.xml" value="0.1395" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/drawable/foreground_ripple_on_dark.xml" value="0.203" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/drawable/foreground_round_ripple.xml" value="0.258" />
+        <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/drawable/foreground_round_ripple_on_dark.xml" value="0.271" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.2785" />
+        <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/drawable/ic_baseline_star_24.xml" value="0.255" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.203" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/drawable/ic_dropdown.xml" value="0.1035" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/drawable/ic_dropup.xml" value="0.2625" />
+        <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/drawable/ic_favorite.xml" value="0.271" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/drawable/ic_filter.xml" value="0.2" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/drawable/ic_foreground_ripple_on_dark.xml" value="0.2045" />
+        <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.255" />
+        <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.255" />
+        <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/drawable/ic_popular_tab.xml" value="0.255" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/drawable/ic_radio_button_checked.xml" value="0.1615" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/drawable/ic_radio_button_unchecked.xml" value="0.1615" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/drawable/ic_search.xml" value="0.2365" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/layout/fragment_dashboard.xml" value="0.27239583333333334" />
+        <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/layout/fragment_favorite_currencies.xml" value="0.3546875" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/layout/fragment_home.xml" value="0.27239583333333334" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/layout/fragment_notifications.xml" value="0.27239583333333334" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/layout/fragment_popular_currencies.xml" value="0.32114882506527415" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/layout/item_currency.xml" value="0.3546875" />
+        <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/layout/item_favorite_currency_rate.xml" value="0.8931185944363104" />
+        <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/layout/item_popular_currency_rate.xml" value="0.3546875" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/layout/item_rate.xml" value="0.3546875" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/layout/menu_rates_sort.xml" value="0.5" />
         <entry key="..\:/Users/Apollo/Desktop/CurrencyInfo/app/src/main/res/menu/bottom_nav_menu.xml" value="0.27239583333333334" />
