@@ -4,7 +4,11 @@ Simple application for fetching latest currency rates according to base currency
 
 ## Preview
 
-![](currency-info.gif)
+
+
+https://user-images.githubusercontent.com/62345510/165443713-90b3ad9d-02e3-46e9-a9d0-acee8dee5935.mp4
+
+
 
 
 ## Technologies stack
