@@ -104,7 +104,7 @@ class PopularCurrenciesViewModel @Inject constructor(
                 rates.update { newRates }
                 _baseCurrency.update { baseCurrency }
             }
-            .onFailure { _events.trySend(Event.ShowToast("Failed to get rates. Try again  later")) }
+            .onFailure { _events.trySend(Event.ShowMessage("Failed to get rates. Try again  later")) }
         _isLoaderVisible.update { false }
 
     }

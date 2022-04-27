@@ -74,6 +74,7 @@ class FavoriteCurrenciesViewModel @Inject constructor(
 
     fun onSwipeToDeleteCurrency(currency: Currency) = viewModelScope.launch {
         setCurrencyIsFavoriteUseCase(SetCurrencyIsFavoriteUseCase.Parameters(currency))
+            .onSuccess { }
     }
 
     fun onSortingParameterSelected(parameter: SortingParameter) {
@@ -112,7 +113,7 @@ class FavoriteCurrenciesViewModel @Inject constructor(
             _baseCurrency.update { baseCurrency }
         }.onFailure {
             _events.trySend(
-                Event.ShowToast("Failed to get rates for this base currency. Try again  later")
+                Event.ShowMessage("Failed to get rates for this base currency. Try again  later")
             )
         }
         _isLoaderVisible.update { false }
