@@ -3,11 +3,11 @@
 
     <item
         android:id="@+id/fragment_popular_currencies"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/ic_popular_bottom_tab"
         android:title="@string/popular" />
 
     <item
         android:id="@+id/fragment_favorite_currencies"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:icon="@drawable/ic_favorites_bottom_tab"
         android:title="@string/favorites" />
 </menu>
