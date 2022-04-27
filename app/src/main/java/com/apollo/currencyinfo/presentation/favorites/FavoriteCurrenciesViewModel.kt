@@ -60,7 +60,10 @@ class FavoriteCurrenciesViewModel @Inject constructor(
         getRatesForFavoriteCurrencies(baseCurrency.value)
     }
 
-    fun onChangeBaseCurrencyClicked() = _isSearchLayoutVisible.update { !it }
+    fun onChangeBaseCurrencyClicked() {
+        _events.trySend(Event.HideKeyboard)
+        _isSearchLayoutVisible.update { !it }
+    }
 
     fun onBaseCurrencySearchChanged(name: String?) = currencyNameToSearch.update { name }
 
