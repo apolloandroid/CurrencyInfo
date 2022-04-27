@@ -5,21 +5,179 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".presentation.popular.PopularCurrenciesFragment">
+        android:animateLayoutChanges="true"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/text_home"
+        <View
+            android:id="@+id/view_background_top"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_currency_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_marginTop="32dp"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toStartOf="@id/button_change_base_currency"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="American Dollar" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_currency_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toStartOf="@id/button_change_base_currency"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/text_currency_name"
+            app:layout_constraintTop_toBottomOf="@id/text_currency_name"
+            tools:text="USD" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/button_change_base_currency"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/ic_dropdown"
+            android:foreground="@drawable/foreground_round_ripple_on_dark"
+            android:visibility="invisible"
+            app:layout_constraintTop_toTopOf="@id/text_currency_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_search"
+            android:elevation="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            app:layout_constraintHeight_percent="0.20"
+            android:animateLayoutChanges="true"
+            android:background="@color/color_28262F"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_background_top"
+            tools:visibility="gone">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edit_search"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:drawableStart="@drawable/ic_search"
+                android:drawablePadding="9.5dp"
+                android:gravity="center_vertical"
+                android:hint="@string/hint_search_currencies"
+                android:paddingStart="40dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/grey_overlaid"
+                android:textSize="17sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_currencies"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="21dp"
+                android:background="@color/transparent"
+                android:fadeScrollbars="false"
+                android:maxHeight="200dp"
+                android:orientation="vertical"
+                android:overScrollMode="never"
+                android:paddingBottom="42dp"
+                android:scrollbarSize="4dp"
+                android:scrollbarThumbVertical="@color/white"
+                android:scrollbarTrackVertical="@color/black"
+                android:scrollbars="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_search"
+                tools:itemCount="10"
+                tools:listitem="@layout/item_currency" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/button_sort_rates"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/ic_filter"
+            android:foreground="@drawable/foreground_round_ripple"
+            android:visibility="invisible"
+            android:layout_marginEnd="25dp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_rates"
+            app:layout_constraintTop_toTopOf="@+id/text_rates"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_rates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:textAlignment="center"
-            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:text="@string/rates"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_background_top"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/layout_swipe_to_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/text_rates">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_rates"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:fadeScrollbars="false"
+                android:overScrollMode="never"
+                android:scrollbarSize="4dp"
+                android:scrollbarThumbVertical="@color/black"
+                android:scrollbarTrackVertical="@color/grey_disabled"
+                android:scrollbars="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="16"
+                tools:listitem="@layout/item_rate" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

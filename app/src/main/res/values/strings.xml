@@ -2,4 +2,13 @@
     <string name="app_name">CurrencyInfo</string>
     <string name="popular">Popular</string>
     <string name="favorites">Favorites</string>
+    <string name="hint_search_currencies">Currency name or code</string>
+    <string name="rates">Rates</string>
+    <string name="order">Order</string>
+    <string name="parameter">Parameter</string>
+    <string name="currency_code">Currency code</string>
+    <string name="rate">Rate</string>
+    <string name="ascending">Ascending</string>
+    <string name="descending">Descending</string>
+    <string name="descending">Descending</string>
 </resources>

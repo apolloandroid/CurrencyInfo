@@ -1,15 +1,16 @@
 package com.apollo.currencyinfo.presentation
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.apollo.currencyinfo.R
 import com.apollo.currencyinfo.databinding.ActivityMainBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -19,16 +20,34 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setUpNavigation()
+    }
 
-        val navView: BottomNavigationView = binding.navView
+    private fun setUpNavigation() {
 
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.navigation_home, R.id.navigation_dashboard)
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        binding.navView.setOnItemSelectedListener { menuItem ->
+            handleNavigation(menuItem)
+            false
+        }
+    }
+
+    override fun onBackPressed() {
+        Intent(Intent.ACTION_MAIN).apply {
+            addCategory(Intent.CATEGORY_HOME)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(this)
+        }
+    }
+
+    private fun handleNavigation(item: MenuItem) {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
+        val navigationController = navHostFragment.navController
+        if (!item.isChecked)
+            when (item.itemId) {
+                R.id.fragment_popular_currencies -> navigationController.navigate(R.id.fragment_popular_currencies)
+                R.id.fragment_favorite_currencies -> navigationController.navigate(R.id.fragment_favorite_currencies)
+            }
+        item.isChecked = true
     }
 }

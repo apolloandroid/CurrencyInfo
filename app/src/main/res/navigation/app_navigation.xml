@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/fragment_popular_currencies">
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/fragment_popular_currencies"
         android:name="com.apollo.currencyinfo.presentation.popular.PopularCurrenciesFragment"
         android:label="@string/popular"
         tools:layout="@layout/fragment_popular_currencies" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/fragment_favorite_currencies"
         android:name="com.apollo.currencyinfo.presentation.favorites.FavoriteCurrenciesFragment"
         android:label="@string/favorites"
         tools:layout="@layout/fragment_favorite_currencies" />

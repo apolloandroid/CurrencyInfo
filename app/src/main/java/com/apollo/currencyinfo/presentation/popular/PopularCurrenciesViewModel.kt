@@ -1,13 +1,119 @@
 package com.apollo.currencyinfo.presentation.popular
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.apollo.currencyinfo.domain.model.Currency
+import com.apollo.currencyinfo.domain.model.CurrencyRate
+import com.apollo.currencyinfo.domain.model.CurrencyRatePair
+import com.apollo.currencyinfo.domain.sorting.CurrencyRateSorter
+import com.apollo.currencyinfo.domain.sorting.SortingOrder
+import com.apollo.currencyinfo.domain.sorting.SortingParameter
+import com.apollo.currencyinfo.domain.sorting.SortingState
+import com.apollo.currencyinfo.domain.usecase.GetAllCurrenciesUseCase
+import com.apollo.currencyinfo.domain.usecase.GetCurrencyRatesUseCase
+import com.apollo.currencyinfo.domain.usecase.RefreshCurrenciesUseCase
+import com.apollo.currencyinfo.domain.usecase.SetCurrencyIsFavoriteUseCase
+import com.apollo.currencyinfo.domain.util.successes
+import com.apollo.currencyinfo.presentation.common.Event
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PopularCurrenciesViewModel : ViewModel() {
+@HiltViewModel
+class PopularCurrenciesViewModel @Inject constructor(
+    private val refreshCurrenciesUseCase: RefreshCurrenciesUseCase,
+    private val getAllCurrenciesUseCase: GetAllCurrenciesUseCase,
+    private val getCurrencyRatesUseCase: GetCurrencyRatesUseCase,
+    private val setCurrencyIsFavoriteUseCase: SetCurrencyIsFavoriteUseCase
+) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+    private val _events = Channel<Event>(Channel.UNLIMITED)
+    val events = _events.receiveAsFlow()
+
+    private val _baseCurrency = MutableStateFlow<Currency>(Currency())
+    val baseCurrency = _baseCurrency.asStateFlow()
+
+    private val _isSearchLayoutVisible = MutableStateFlow<Boolean>(false)
+    val isSearchLayoutVisible = _isSearchLayoutVisible.asStateFlow()
+
+    private val currencies = getAllCurrenciesUseCase().successes()
+    private val currencyNameToSearch = MutableStateFlow<String?>(null)
+    val baseCurrencies = getCurrencies()
+
+    val isChangeBaseCurrencyButtonVisible = baseCurrencies.map { it.size > 1 }
+
+    private val rates = MutableStateFlow<List<CurrencyRate>>(listOf())
+    private val sortingOrder = MutableStateFlow<SortingOrder>(SortingOrder.ASCENDING)
+    private val sortingParameter = MutableStateFlow<SortingParameter>(SortingParameter.CODE)
+    val currencyRatePairs = getCurrenciesRatesPairs()
+
+    val isSortButtonVisible = currencyRatePairs.map { it.size > 1 }
+
+    private val _isLoaderVisible = MutableStateFlow<Boolean>(false)
+    val isLoaderVisible = _isLoaderVisible.asStateFlow()
+
+
+    init {
+        viewModelScope.launch {
+            refreshCurrenciesUseCase(Unit)
+                .onFailure {
+                    Log.d("TAG", "Failure: ${it.message}")
+                }
+        }
+
+        getRatesForBaseCurrency(baseCurrency.value)
     }
-    val text: LiveData<String> = _text
+
+    fun onChangeBaseCurrencyClicked() = _isSearchLayoutVisible.update { !it }
+
+    fun onBaseCurrencySearchChanged(name: String?) = currencyNameToSearch.update { name }
+
+    fun onBaseCurrencyClicked(currency: Currency) = getRatesForBaseCurrency(currency)
+
+    fun onSortButtonClicked() = _events.trySend(
+        Event.ShowRatesSortingMenu(SortingState(sortingOrder.value, sortingParameter.value))
+    )
+
+    fun onSwipeToRefreshRates() = getRatesForBaseCurrency(baseCurrency.value)
+
+    fun onAddCurrencyToFavoritesClicked(currency: Currency) = viewModelScope.launch {
+        setCurrencyIsFavoriteUseCase(SetCurrencyIsFavoriteUseCase.Parameters(currency))
+    }
+
+    fun onSortingParameterSelected(parameter: SortingParameter) {
+        sortingParameter.update { parameter }
+    }
+
+    fun onSortingOrderSelected(order: SortingOrder) = sortingOrder.update { order }
+
+    private fun getCurrencies() = combine(currencies, currencyNameToSearch) { currencies, name ->
+        if (name.isNullOrEmpty()) currencies
+        else currencies.filter { it.code.contains(name, true) || it.name.contains(name, true) }
+    }
+
+    private fun getCurrenciesRatesPairs() = combine(
+        currencies, rates, sortingParameter, sortingOrder
+    ) { currencies, rates, parameter, order ->
+        val currenciesByCode = currencies.associateBy { it.code }
+        val pairs = rates.mapNotNull { rate ->
+            currenciesByCode[rate.currencyCode]?.let { currency ->
+                CurrencyRatePair(currency, rate)
+            }
+        }
+        CurrencyRateSorter.sort(parameter, order, pairs)
+    }
+
+    private fun getRatesForBaseCurrency(baseCurrency: Currency) = viewModelScope.launch {
+        _isLoaderVisible.update { true }
+        getCurrencyRatesUseCase(GetCurrencyRatesUseCase.Parameters(baseCurrency))
+            .onSuccess { newRates ->
+                rates.update { newRates }
+                _baseCurrency.update { baseCurrency }
+            }
+            .onFailure { _events.trySend(Event.ShowToast("Failed to get rates. Try later")) }
+        _isLoaderVisible.update { false }
+    }
 }

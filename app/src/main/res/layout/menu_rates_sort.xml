@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="220dp"
+        android:animateLayoutChanges="true"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:background="@drawable/background_white_round_corners_5dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_parameter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/parameter"
+            android:textColor="@color/grey"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RadioGroup
+            android:id="@+id/radio_group_parameter"
+            android:layout_width="184dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/text_parameter"
+            app:layout_constraintTop_toBottomOf="@id/text_parameter">
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/radio_button_code"
+                android:layout_width="184dp"
+                android:layout_height="20dp"
+                android:button="@drawable/background_radio_button"
+                android:text="@string/currency_code"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/radio_button_rate"
+                android:layout_width="184dp"
+                android:layout_height="20dp"
+                android:button="@drawable/background_radio_button"
+                android:text="@string/rate"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+        </RadioGroup>
+
+        <View
+            android:id="@+id/view_separator"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="12dp"
+            android:background="@color/grey_overlaid"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/radio_group_parameter" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/order"
+            android:textColor="@color/grey"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_separator" />
+
+        <RadioGroup
+            android:id="@+id/radio_group_order"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="start"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/text_order"
+            app:layout_constraintTop_toBottomOf="@id/text_order">
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/radio_button_ascending"
+                android:layout_width="184dp"
+                android:layout_height="20dp"
+                android:button="@drawable/background_radio_button"
+                android:text="@string/ascending"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/radio_button_descending"
+                android:layout_width="184dp"
+                android:layout_height="20dp"
+                android:button="@drawable/background_radio_button"
+                android:text="@string/descending"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+        </RadioGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

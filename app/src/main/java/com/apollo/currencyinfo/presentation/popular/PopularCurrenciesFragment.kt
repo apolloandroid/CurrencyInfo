@@ -4,39 +4,168 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.PopupWindow
+import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
+import com.apollo.currencyinfo.R
 import com.apollo.currencyinfo.databinding.FragmentPopularCurrenciesBinding
+import com.apollo.currencyinfo.databinding.MenuRatesSortBinding
+import com.apollo.currencyinfo.domain.sorting.SortingOrder
+import com.apollo.currencyinfo.domain.sorting.SortingParameter
+import com.apollo.currencyinfo.domain.sorting.SortingState
+import com.apollo.currencyinfo.presentation.common.CurrencyAdapter
+import com.apollo.currencyinfo.presentation.common.Event
+import com.apollo.currencyinfo.presentation.util.collectOnLifecycle
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PopularCurrenciesFragment : Fragment() {
 
-    private var _binding: FragmentPopularCurrenciesBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentPopularCurrenciesBinding
+    private val viewModel: PopularCurrenciesViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(PopularCurrenciesViewModel::class.java)
-
-        _binding = FragmentPopularCurrenciesBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+        binding = FragmentPopularCurrenciesBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpBaseCurrency()
+        setUpChangeBaseCurrencyButton()
+        setUpBaseCurrencySearch()
+        setUpCurrenciesRecycler()
+        setUpSortButton()
+        setUpRatesLayout()
+        setUpRatesRecycler()
+        setUpEvents()
+    }
+
+    private fun setUpBaseCurrency() = collectOnLifecycle(viewModel.baseCurrency) {
+        binding.textCurrencyName.text = it.name
+        binding.textCurrencyCode.text = it.code
+    }
+
+    private fun setUpChangeBaseCurrencyButton() {
+        binding.buttonChangeBaseCurrency.setOnClickListener { viewModel.onChangeBaseCurrencyClicked() }
+        collectOnLifecycle(viewModel.isChangeBaseCurrencyButtonVisible) {
+            binding.buttonChangeBaseCurrency.isVisible = it
+        }
+    }
+
+    private fun setUpBaseCurrencySearch() {
+        binding.editSearch.doAfterTextChanged {
+            viewModel.onBaseCurrencySearchChanged(it.toString())
+            if (it.isNullOrEmpty()) binding.recyclerCurrencies.scrollToPosition(0)
+        }
+        collectOnLifecycle(viewModel.isSearchLayoutVisible) {
+            binding.layoutSearch.isVisible = it
+            binding.buttonChangeBaseCurrency.background =
+                if (it) ContextCompat.getDrawable(requireContext(), R.drawable.ic_dropup)
+                else ContextCompat.getDrawable(requireContext(), R.drawable.ic_dropdown)
+        }
+    }
+
+    private fun setUpCurrenciesRecycler() {
+        val adapter = CurrencyAdapter(viewModel::onBaseCurrencyClicked)
+        binding.recyclerCurrencies.adapter = adapter
+        collectOnLifecycle(viewModel.baseCurrencies) { adapter.submitList(it) }
+    }
+
+    private fun setUpSortButton() {
+        binding.buttonSortRates.setOnClickListener { viewModel.onSortButtonClicked() }
+        collectOnLifecycle(viewModel.isSortButtonVisible) {
+            binding.buttonSortRates.isVisible = it
+        }
+    }
+
+    private fun setUpRatesLayout() {
+        binding.layoutSwipeToRefresh.setOnRefreshListener(viewModel::onSwipeToRefreshRates)
+        collectOnLifecycle(viewModel.isLoaderVisible) {
+            binding.layoutSwipeToRefresh.isRefreshing = it
+        }
+    }
+
+    private fun setUpRatesRecycler() {
+        val adapter = CurrencyRateAdapter(viewModel::onAddCurrencyToFavoritesClicked)
+        binding.recyclerRates.adapter = adapter
+        val itemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
+        AppCompatResources.getDrawable(requireContext(), R.drawable.background_divider)
+            ?.let { itemDecoration.setDrawable(it) }
+
+        binding.recyclerRates.addItemDecoration(itemDecoration)
+        collectOnLifecycle(viewModel.currencyRatePairs) { adapter.submitList(it) }
+    }
+
+    private fun setUpEvents() = collectOnLifecycle(viewModel.events) {
+        when (it) {
+            is Event.ShowRatesSortingMenu -> showShowRatesSortingMenu(it.state)
+            is Event.ShowToast -> {
+                Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun showShowRatesSortingMenu(state: SortingState) {
+        val popUpView = MenuRatesSortBinding.inflate(layoutInflater)
+        setUpSortingParameterRadioGroup(popUpView, state)
+        setUpSortingOrderRadioGroup(popUpView, state)
+
+        val profilesFilterMenu = PopupWindow(
+            popUpView.root,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        profilesFilterMenu.apply {
+            isOutsideTouchable = true
+            elevation = 5f
+            showAsDropDown(binding.buttonSortRates, 0, 0, GravityCompat.END)
+        }
+    }
+
+    private fun setUpSortingParameterRadioGroup(
+        binding: MenuRatesSortBinding,
+        state: SortingState
+    ) {
+        binding.radioGroupParameter.apply {
+            val ids = listOf(
+                Pair(binding.radioButtonCode.id, SortingParameter.CODE),
+                Pair(binding.radioButtonRate.id, SortingParameter.RATE)
+            )
+            check(ids.first { it.second == state.parameter }.first)
+            setOnCheckedChangeListener { _, id ->
+                val parameter = if (id == binding.radioButtonCode.id) SortingParameter.CODE
+                else SortingParameter.RATE
+                viewModel.onSortingParameterSelected(parameter)
+            }
+        }
+    }
+
+    private fun setUpSortingOrderRadioGroup(binding: MenuRatesSortBinding, state: SortingState) {
+        binding.radioGroupOrder.apply {
+            val ids = listOf(
+                Pair(binding.radioButtonAscending.id, SortingOrder.ASCENDING),
+                Pair(binding.radioButtonDescending.id, SortingOrder.DESCENDING),
+            )
+            check(ids.first { it.second == state.order }.first)
+            setOnCheckedChangeListener { _, id ->
+                val order = if (id == binding.radioButtonAscending.id) SortingOrder.ASCENDING
+                else SortingOrder.DESCENDING
+                viewModel.onSortingOrderSelected(order)
+            }
+        }
     }
 }
+
