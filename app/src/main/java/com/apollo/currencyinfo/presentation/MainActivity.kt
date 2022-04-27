@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpNavigation() {
-
         binding.navView.setOnItemSelectedListener { menuItem ->
             handleNavigation(menuItem)
             false

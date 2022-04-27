@@ -5,13 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
-import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.apollo.currencyinfo.R
@@ -20,16 +18,16 @@ import com.apollo.currencyinfo.databinding.MenuRatesSortBinding
 import com.apollo.currencyinfo.domain.sorting.SortingOrder
 import com.apollo.currencyinfo.domain.sorting.SortingParameter
 import com.apollo.currencyinfo.domain.sorting.SortingState
-import com.apollo.currencyinfo.presentation.common.CurrencyAdapter
-import com.apollo.currencyinfo.presentation.common.Event
+import com.apollo.currencyinfo.presentation.base.BaseFragment
+import com.apollo.currencyinfo.presentation.base.CurrencyAdapter
 import com.apollo.currencyinfo.presentation.util.collectOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PopularCurrenciesFragment : Fragment() {
+class PopularCurrenciesFragment : BaseFragment() {
 
     private lateinit var binding: FragmentPopularCurrenciesBinding
-    private val viewModel: PopularCurrenciesViewModel by viewModels()
+    override val viewModel: PopularCurrenciesViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,7 +47,24 @@ class PopularCurrenciesFragment : Fragment() {
         setUpSortButton()
         setUpRatesLayout()
         setUpRatesRecycler()
-        setUpEvents()
+    }
+
+    override fun showRatesSortingMenu(sortingState: SortingState) {
+        val popUpView = MenuRatesSortBinding.inflate(layoutInflater)
+        setUpSortingParameterRadioGroup(popUpView, sortingState)
+        setUpSortingOrderRadioGroup(popUpView, sortingState)
+
+        val profilesFilterMenu = PopupWindow(
+            popUpView.root,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        profilesFilterMenu.apply {
+            isOutsideTouchable = true
+            elevation = 5f
+            showAsDropDown(binding.buttonSortRates, 0, 0, GravityCompat.END)
+        }
     }
 
     private fun setUpBaseCurrency() = collectOnLifecycle(viewModel.baseCurrency) {
@@ -106,33 +121,6 @@ class PopularCurrenciesFragment : Fragment() {
 
         binding.recyclerRates.addItemDecoration(itemDecoration)
         collectOnLifecycle(viewModel.currencyRatePairs) { adapter.submitList(it) }
-    }
-
-    private fun setUpEvents() = collectOnLifecycle(viewModel.events) {
-        when (it) {
-            is Event.ShowRatesSortingMenu -> showShowRatesSortingMenu(it.state)
-            is Event.ShowToast -> {
-                Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun showShowRatesSortingMenu(state: SortingState) {
-        val popUpView = MenuRatesSortBinding.inflate(layoutInflater)
-        setUpSortingParameterRadioGroup(popUpView, state)
-        setUpSortingOrderRadioGroup(popUpView, state)
-
-        val profilesFilterMenu = PopupWindow(
-            popUpView.root,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-
-        profilesFilterMenu.apply {
-            isOutsideTouchable = true
-            elevation = 5f
-            showAsDropDown(binding.buttonSortRates, 0, 0, GravityCompat.END)
-        }
     }
 
     private fun setUpSortingParameterRadioGroup(

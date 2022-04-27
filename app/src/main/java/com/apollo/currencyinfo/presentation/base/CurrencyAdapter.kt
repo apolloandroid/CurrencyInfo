@@ -1,4 +1,4 @@
-package com.apollo.currencyinfo.presentation.common
+package com.apollo.currencyinfo.presentation.base
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
