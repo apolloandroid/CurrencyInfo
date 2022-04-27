@@ -5,7 +5,7 @@ import com.apollo.currencyinfo.data.currency.remote.CurrencyApi
 import com.apollo.currencyinfo.data.currency.remote.dto.GetCurrenciesResponseDto
 import com.apollo.currencyinfo.data.currencyRate.remote.CurrencyRateApi
 import com.apollo.currencyinfo.data.currencyRate.remote.dto.GetCurrencyRatesResponseDto
-import com.apollo.currencyinfo.data.util.RsponseDeserializer
+import com.apollo.currencyinfo.data.util.ResponseDeserializer
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -82,17 +82,17 @@ class NetworkModule {
     fun provideCurrencyGsonConverter(): Converter.Factory = GsonConverterFactory.create(
         GsonBuilder().registerTypeAdapter(
             GetCurrenciesResponseDto::class.java,
-            RsponseDeserializer()
+            ResponseDeserializer()
         ).create()
     )
 
     @Provides
     @Singleton
-    @CurrencyEndpoint
+    @CurrencyRateEndpoint
     fun provideCurrencyRateGsonConverter(): Converter.Factory = GsonConverterFactory.create(
         GsonBuilder().registerTypeAdapter(
             GetCurrencyRatesResponseDto::class.java,
-            RsponseDeserializer()
+            ResponseDeserializer()
         ).create()
     )
 }
