@@ -10,16 +10,10 @@ import kotlinx.coroutines.flow.Flow
 interface CurrencyDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(currency: CurrencyEntity)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(currencies: List<CurrencyEntity>)
 
     @Query("SELECT * FROM currencies")
     suspend fun getAll(): List<CurrencyEntity>
-
-    @Query("SELECT COUNT(code) FROM currencies")
-    fun getSize(): Int
 
     @Query("SELECT * FROM currencies")
     fun getAllFlow(): Flow<List<CurrencyEntity>>

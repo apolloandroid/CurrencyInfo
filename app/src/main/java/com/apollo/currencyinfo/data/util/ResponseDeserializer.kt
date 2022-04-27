@@ -14,7 +14,7 @@ import java.lang.reflect.Type
  * Custom Deserializer. As we have different server response Json structure with a lot of types,
  * we must parse each type by hands.
  */
-class RsponseDeserializer : JsonDeserializer<ResponseDto> {
+class ResponseDeserializer : JsonDeserializer<ResponseDto> {
 
     companion object {
         private const val KEY_SUCCESS = "success"

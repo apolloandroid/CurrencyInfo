@@ -11,11 +11,12 @@ class CurrencyRateRepository @Inject constructor(
     private val remoteDataSource: CurrencyRateApi
 ) {
 
-    suspend fun getCurrencyRates(baseCurrency: Currency) {
-        remoteDataSource.getCurrencyRates(baseCurrency.code)
+    suspend fun getRates(baseCurrency: Currency): List<CurrencyRate> {
+        val response = remoteDataSource.getCurrencyRates(baseCurrency.code)
+        return response.rates.map { it.toDomain() }
     }
 
-    suspend fun getCurrencyRatesForFavorites(
+    suspend fun getRatesForFavorites(
         baseCurrency: Currency,
         favoriteCurrencies: List<Currency>
     ): List<CurrencyRate> {
